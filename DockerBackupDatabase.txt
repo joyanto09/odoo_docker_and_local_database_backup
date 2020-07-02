@@ -1,0 +1,59 @@
+############ DOCKER DATABASE BACKUP #########################
+
+# Hlepful Link
+
+1> Link: https://stackoverflow.com/questions/24718706/backup-restore-a-dockerized-postgresql-database
+
+2> link: link: https://www.odoo.com/forum/help-1/question/how-to-setup-a-regular-postgresql-database-backup-4728
+
+3> link: https://devopsheaven.com/postgresql/psql/databases/docker/backup/restore/2017/09/10/restore-postgresql-database-using-docker.html
+
+4> link: https://simkimsia.com/how-to-restore-database-dumps-for-postgres-in-docker-container/
+
+5> link: https://devopsheaven.com/category/backup
+
+6> LINK: https://www.youtube.com/watch?v=A8dErdDMqb0
+
+>>>>>>>>> Backup Docker Database Comand <<<<<<<<<<<<
+#Check Docker Database
+#Owner Name is same is the postgres_user name
+docker exec docker_db_container_name psql -U owner_name -l
+  
+#Example
+
+			 List of databases
+
+				Name        |  Owner   
+			--------------------+----------
+			 some_database      | postgres
+
+#BACKUP
+docker exec docker_db_container_name pg_dump backup_database_name -c -U owner_name > ./Desktop/backup_db_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+
+#Then Create a "test" Database and DUMP The Database and check the database are create or not
+docker exec docker_db_container_name psql -U owner_name -l
+
+			 List of databases
+
+				Name        |  Owner   
+			--------------------+----------
+			 some_database      | postgres
+			 test		    | postgres
+
+#Dump Your Database
+docker exec docker_db_container_name pg_dump -U owner_name -d test < ./Desktop/backup_db_07-03-2020_17_24_54.sql
+
+#And Resotore the Database
+cat Desktop/backup_db_07-03-2020_17_24_54.sql | docker exec -i docker_db_container_name psql -U owner_name -d test
+
+
+##Take Some Minute then successfully restore and reload your database and login 
+
+
+
+
+
+
+
+
+

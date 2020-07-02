@@ -1,0 +1,49 @@
+########################### Sheduling ##################################
+
+#First Create a .sh File for example "test.sh"
+
+test.sh
+	#First You Remove your backup Directory
+	 rm -r /home/sayed/Desktop/backup
+	
+	#And again Create backup Directory
+	 mkdir /home/sayed/Desktop/backup
+	
+	#Now Backup Your Database
+	 docker exec docker_db_container_name pg_dump backup_database_name -c -U owner_name > /home/sayed/Desktop/backup/dumps_shedule`date 
+         +%d-%m-%Y"_"%H_%M_%S`$
+
+#Then get Your test.sh file
+ sudo chmod +x /home/sayed/Desktop/test.sh
+
+#Now open Crontab Sheduler
+ crontab -e
+	
+	# Edit this file to introduce tasks to be run by cron.
+	# 
+	# Each task to run has to be defined through a single line
+	# indicating with different fields when the task will be run
+	# and what command to run for the task
+	# 
+	# To define the time you can provide concrete values for
+	# minute (m), hour (h), day of month (dom), month (mon),
+	# and day of week (dow) or use '*' in these fields (for 'any').# 
+	# Notice that tasks will be started based on the cron's system
+	# daemon's notion of time and timezones.
+	# 
+	# Output of the crontab jobs (including errors) is sent through
+	# email to the user the crontab file belongs to (unless redirected).
+	# 
+	# For example, you can run a backup of all your user accounts
+	# at 5 a.m every week with:
+	# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+	# 
+	# For more information see the manual pages of crontab(5) and cron(8)
+	# 
+	# m h  dom mon dow   command
+	# Down to write your Shedule
+	16 13 * * * /bin/sh /home/sayed/Desktop/test.sh	
+
+
+###### Then Wait and see The Backup Shedule Are Work Successfully ##########
+	

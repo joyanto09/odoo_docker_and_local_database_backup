@@ -1,0 +1,129 @@
+############ DOCKER DATABASE BACKUP #########################
+
+1> Link: https://stackoverflow.com/questions/24718706/backup-restore-a-dockerized-postgresql-database
+
+2> link: link: https://www.odoo.com/forum/help-1/question/how-to-setup-a-regular-postgresql-database-backup-4728
+
+3> link: https://devopsheaven.com/postgresql/psql/databases/docker/backup/restore/2017/09/10/restore-postgresql-database-using-docker.html
+
+4> link: https://simkimsia.com/how-to-restore-database-dumps-for-postgres-in-docker-container/
+5> link: https://devopsheaven.com/category/backup
+6> LINK: https://www.youtube.com/watch?v=A8dErdDMqb0
+
+#####Comand Line############
+
+>>> Backup your databases <<<
+
+#> docker exec basb_joy_db_work pg_dump dasb_work_test_03022020 -c -U odoo > ./Desktop/dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+
+>>> Restore your databases <<<
+
+#> cat your_dump.sql | docker exec -i your-db-container psql -U postgres
+
+
+cat Desktop/dump_07-03-2020_11_22_09.sql | docker exec -i basb_joy_db \
+> /usr/bin/psql -h localhost \
+> -U odoo postgres \
+> -d backup_test
+
+
+#############################################################
+Finaly Done Work
+
+#> docker exec backup_basb_2702_db pg_dump BASB_Backup-27022020 -c -U odoo > ./Desktop/dumps2_`date +%d-%m-%Y"_"%H_%M_%S`.sql //OR//
+	docker exec backup_basb_2702_db pg_dump BASB_Backup-27022020 -c -U odoo > ./Desktop/dumps2_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+
+then create a dump file 
+#>docker exec backup_basb_2702_db pg_dump -U odoo -d test < ./Desktop/dumps2_07-03-2020_17_24_54.sql
+then restore database
+#> cat Desktop/dumps2_07-03-2020_17_24_54.sql | docker exec -i backup_basb_2702_db psql -U odoo -d test
+
+
+##############################################################################################
+
+############ DOCKER DATABASE BACKUP ######################### (Update)
+
+1> Link: https://stackoverflow.com/questions/24718706/backup-restore-a-dockerized-postgresql-database
+
+2> link: link: https://www.odoo.com/forum/help-1/question/how-to-setup-a-regular-postgresql-database-backup-4728
+
+3> link: https://devopsheaven.com/postgresql/psql/databases/docker/backup/restore/2017/09/10/restore-postgresql-database-using-docker.html
+
+4> link: https://simkimsia.com/how-to-restore-database-dumps-for-postgres-in-docker-container/
+5> link: https://devopsheaven.com/category/backup
+6> LINK: https://www.youtube.com/watch?v=A8dErdDMqb0
+
+#####Comand Line############
+
+>>> Backup your databases <<<
+
+#> docker exec basb_joy_db_work pg_dump dasb_work_test_03022020 -c -U odoo > ./Desktop/dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+
+>>> Restore your databases <<<
+
+#> cat your_dump.sql | docker exec -i your-db-container psql -U postgres
+
+
+cat Desktop/dump_07-03-2020_11_22_09.sql | docker exec -i basb_joy_db \
+> /usr/bin/psql -h localhost \
+> -U odoo postgres \
+> -d backup_test
+
+
+#############################################################
+Finaly Done Work
+
+#> docker exec backup_basb_2702_db pg_dump BASB_Backup-27022020 -c -U odoo > ./Desktop/dumps2_`date +%d-%m-%Y"_"%H_%M_%S`.sql //OR//
+	docker exec backup_basb_2702_db pg_dump BASB_Backup-27022020 -c -U odoo > ./Desktop/dumps2_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+
+then create a dump file 
+#>docker exec backup_basb_2702_db pg_dump -U odoo -d test < ./Desktop/dumps2_07-03-2020_17_24_54.sql
+then restore database
+#> cat Desktop/dumps2_07-03-2020_17_24_54.sql | docker exec -i backup_basb_2702_db psql -U odoo -d test
+
+#############################################################
+Sheduling
+
+first create a test.sh
+
+#BACKUP_DIR=/home/sayed/Desktop/
+rm -r /home/sayed/Desktop/backup
+
+mkdir /home/sayed/Desktop/backup
+
+docker exec backup_basb_2702_db pg_dump BASB_Backup-27022020 -c -U odoo > /home/sayed/Desktop/backup/dumps_shedule`date +%d-%m-%Y"_"%H_%M_%S`$
+
+sudo chmod +x /home/sayed/Desktop/test.sh
+
+now crontab shedule
+
+crontab -e
+
+# Edit this file to introduce tasks to be run by cron.
+# 
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+# 
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').# 
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+# 
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+# 
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+# 
+# For more information see the manual pages of crontab(5) and cron(8)
+# 
+# m h  dom mon dow   command
+# Down to write your Shedule
+16 13 * * * /bin/sh /home/sayed/Desktop/test.sh
+
+
+
+
